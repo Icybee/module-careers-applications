@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+.control-group--local-careers-applications-notify {
+	display: none;
+}
+
+.control-group--local-careers-applications-notify.enabled {
+	display: block;
+}
+
+.cell--cv .btn {
+	white-space: nowrap;
+}

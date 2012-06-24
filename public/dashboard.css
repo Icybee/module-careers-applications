@@ -1,0 +1,32 @@
+@CHARSET "UTF-8";
+
+#careers-applications-summary div.panel-contents {
+	margin: 0;
+}
+
+#careers-applications-summary p.nothing {
+	margin: 1em;
+	text-align: center;
+}
+
+#careers-applications-summary tr+tr td {
+	padding-top: 10px;
+}
+
+#careers-applications-summary td.date {
+	width: 12ex;
+	text-align: right;
+	padding-right: 1ex;
+	background: white;
+	border-right: 1px solid #CCC;
+	font-size: .8571em;
+	vertical-align: top;
+}
+
+#careers-applications-summary td.title {
+	padding-left: 1ex;
+}
+
+#careers-applications-summary .excerpt {
+	font-size: 12px;
+}
