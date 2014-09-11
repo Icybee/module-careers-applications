@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
-class ConfigOperation extends \Icybee\Operation\Module\Config
+class ConfigOperation extends \Icybee\ConfigOperation
 {
-	protected function get_properties()
+	protected function lazy_get_properties()
 	{
-		$properties = parent::get_properties();
+		$properties = parent::lazy_get_properties();
 
 		$flat_id = $this->module->flat_id;
 

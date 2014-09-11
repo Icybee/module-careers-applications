@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
 class Hooks
 {
@@ -17,9 +17,9 @@ class Hooks
 	{
 		global $core;
 
-		$core->document->css->add('public/dashboard.css');
+		$core->document->css->add(DIR . 'public/dashboard.css');
 
-		$last = $core->models['careers.applications']->visible->order('created DESC')->limit(3)->all;
+		$last = $core->models['careers.applications']->visible->order('created_at DESC')->limit(3)->all;
 
 		if (!$last)
 		{
@@ -32,7 +32,7 @@ class Hooks
 
 		foreach ($last as $record)
 		{
-			$date = \ICanBoogie\I18n\date_period($record->created);
+			$date = \ICanBoogie\I18n\date_period($record->created_at);
 
 			if ($date === $last_date)
 			{
@@ -56,7 +56,7 @@ class Hooks
 			}
 			else
 			{
-				$offer = '<em class="small light">' . t('Unsolicited application') . '</em>';
+				$offer = '<em class="small light">' . \ICanBoogie\I18n\t('Unsolicited application') . '</em>';
 			}
 
 			$excerpt = null;
@@ -109,7 +109,7 @@ EOT;
 
 		$path = $core->site->path;
 		$count = $core->models['careers.applications']->visible->count;
-		$txt_all = t('careers_applications.count', array(':count' => $count));
+		$txt_all = \ICanBoogie\I18n\t('careers_applications.count', array(':count' => $count));
 
 		$rc .= <<<EOT
 <div class="panel-footer"><a href="$path/admin/careers.applications">$txt_all</a></div>

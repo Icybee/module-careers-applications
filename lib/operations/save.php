@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
 use ICanBoogie\Uploaded;
 use ICanBoogie\Mailer;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\ActiveRecord\File;
 
-class SaveOperation extends \Icybee\Operation\ActiveRecord\Save
+class SaveOperation extends \ICanBoogie\SaveOperation
 {
 	protected $accept = array
 	(
@@ -26,18 +26,18 @@ class SaveOperation extends \Icybee\Operation\ActiveRecord\Save
 		'.docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 	);
 
-	protected function get_properties()
+	protected function lazy_get_properties()
 	{
 		global $core;
 
-		$properties = parent::get_properties();
+		$properties = parent::lazy_get_properties();
 
 		if (empty($properties['cv']))
 		{
 			unset($properties['cv']);
 		}
 
-		$properties['siteid'] = $core->site_id;
+		$properties['site_id'] = $core->site_id;
 
 		return $properties;
 	}
@@ -99,7 +99,6 @@ class SaveOperation extends \Icybee\Operation\ActiveRecord\Save
 	 * The only purpose of this method is to handle missing files, further errors - such as type
 	 * errors - should be handled during the _validate_ method.
 	 *
-	 * @param WdOperation $operation
 	 * @param array $controls
 	 *
 	 * @return boolean Control success.
@@ -126,8 +125,6 @@ class SaveOperation extends \Icybee\Operation\ActiveRecord\Save
 
 	/**
 	 * Checks if the files handled during the control_operation_save() method have errors.
-	 *
-	 * @see WdPModule::validate_operation_save()
 	 */
 	protected function validate(\ICanBoogie\Errors $errors)
 	{
@@ -149,6 +146,6 @@ class SaveOperation extends \Icybee\Operation\ActiveRecord\Save
 			}
 		}
 
-		return parent::validate();
+		return parent::validate($errors);
 	}
 }

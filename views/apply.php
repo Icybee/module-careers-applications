@@ -20,7 +20,7 @@ $formid = $core->site->metas['careers_applications.form_id'];
 
 if (!$formid)
 {
-	throw new ICanBoogie\Exception\Config($core->modules['careers.applications']);
+	throw new \ICanBoogie\Exception\Config($core->modules['careers.applications']);
 }
 
 try
@@ -31,7 +31,7 @@ try
 
 	echo $form;
 }
-catch (Exception $e)
+catch (\Exception $e)
 {
 	throw $e;
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
 use Brickrouge\Element;
 use Brickrouge\Form;
@@ -19,11 +19,11 @@ use Brickrouge\Form;
  */
 class EditBlock extends \Icybee\EditBlock
 {
-	protected function alter_attributes(array $attributes)
+	protected function lazy_get_attributes()
 	{
 		return \ICanBoogie\array_merge_recursive
 		(
-			parent::alter_attributes($attributes), array
+			parent::lazy_get_attributes(), array
 			(
 				Element::GROUPS => array
 				(
@@ -46,13 +46,13 @@ class EditBlock extends \Icybee\EditBlock
 		);
 	}
 
-	protected function alter_children(array $children, array &$properties, array &$attributes)
+	protected function lazy_get_children()
 	{
-		$form_attributes = \ICanBoogie\Modules\Careers\Applications\ApplyForm::tags($properties);
+		$form_attributes = \Icybee\Modules\Careers\Applications\ApplyForm::tags($this->values);
 
 		return array_merge
 		(
-			parent::alter_children($children, $properties, $attributes), $form_attributes[self::CHILDREN], array
+			parent::lazy_get_children(), $form_attributes[Element::CHILDREN], array
 			(
 				'email-confirm' => null
 			)

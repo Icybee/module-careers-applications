@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
 use Brickrouge\Element;
 use Brickrouge\Form;
@@ -23,8 +23,8 @@ class ConfigBlock extends \Icybee\ConfigBlock
 	{
 		parent::add_assets($document);
 
-		$document->css->add('../../public/admin.css');
-		$document->js->add('../../public/admin.js');
+		$document->css->add(DIR . 'public/admin.css');
+		$document->js->add(DIR . 'public/admin.js');
 	}
 
 	protected function alter_children(array $children, array &$properties, array &$attributes)

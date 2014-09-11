@@ -1,7 +1,8 @@
 <?php
 
-namespace ICanBoogie;
+namespace Icybee\Modules\Careers\Applications;
 
+use ICanBoogie\Module;
 use ICanBoogie\ActiveRecord\Model;
 
 return array
@@ -12,28 +13,29 @@ return array
 	(
 		'primary' => array
 		(
-			Model::T_SCHEMA => array
+			Model::SCHEMA => array
 			(
 				'fields' => array
 				(
 					'application_id' => 'serial',
 					'offer_id' => 'foreign',
-					'siteid' => 'foreign',
+					'site_id' => 'foreign',
 					'firstname' => array('varchar', 80),
 					'lastname' => array('varchar', 80),
 					'email' => array('varchar', 80),
 					'study_level' => array('integer', 'tiny'),
 					'experience' => array('integer', 'tiny'),
 					'cover_letter' => 'text',
-					'cv' => 'varchar',
-					'created' => array('timestamp', 'default' => 'current_timestamp()')
+					'cv_hash' => array('char', 40),
+					'created_at' => 'datetime'
 				)
 			)
 		)
 	),
 
+	Module::T_NAMESPACE => __NAMESPACE__,
 	Module::T_REQUIRES => array
 	(
-		'forms' => '1.0'
+		'forms' => '2.*'
 	)
 );

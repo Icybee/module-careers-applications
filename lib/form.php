@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
 use ICanBoogie\Mailer;
 use ICanBoogie\Operation;
@@ -106,12 +106,14 @@ class ApplyForm extends Form
 
 				'cv' => new Element
 				(
-					Element::TYPE_FILE, array
+					'input', array
 					(
 						Form::LABEL => 'cv',
-						Element::FILE_WITH_LIMIT => 4096,
-						Element::FILE_WITH_REMINDER => true,
-						Element::REQUIRED => $core->site->metas['careers_applications.is_cv_required']
+// 						Element::FILE_WITH_LIMIT => 4096,
+// 						Element::FILE_WITH_REMINDER => true,
+						Element::REQUIRED => $core->site->metas['careers_applications.is_cv_required'],
+
+						'type' => 'file'
 					)
 				)
 			)

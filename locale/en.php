@@ -21,7 +21,13 @@ return array
 			)
 		),
 
-		'manager.title.lastname' => 'Name'
+		'manage.column' => array
+		(
+			'name' => 'Name',
+			'cv' => 'CV',
+			'email' => 'E-mail',
+			'offer_id' => 'Offer'
+		)
 	),
 
 	'module_category.title.careers' => 'Careers',

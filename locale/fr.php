@@ -26,7 +26,11 @@ return array
 			)
 		),
 
-		'manager.title.lastname' => 'Name',
+		'manage.column' => array
+		(
+			'name' => 'Nom',
+			'offer_id' => 'Offre'
+		),
 
 		'name' => array
 		(

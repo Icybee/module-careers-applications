@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
 
 use ICanBoogie\ActiveRecord\Query;
 
 use Brickrouge\Document;
 
-class ManageBlock extends \WdManager
+class ManageBlock extends \Icybee\ManageBlock
 {
 	protected static function add_assets(Document $document)
 	{
 		parent::add_assets($document);
 
-		$document->css->add('../../public/admin.css');
+		$document->css->add(DIR . 'public/admin.css');
 	}
 
 	public function __construct(Module $module, array $attributes=array())
@@ -30,9 +30,8 @@ class ManageBlock extends \WdManager
 		(
 			$module, $attributes + array
 			(
-				self::T_KEY => 'application_id',
-				self::T_COLUMNS_ORDER => array('lastname', 'cv', 'email', 'offer_id', 'created'),
-				self::T_ORDER_BY => array('created', 'desc')
+				self::T_COLUMNS_ORDER => array('name', 'cv', 'email', 'offer_id', 'created_at'),
+				self::T_ORDER_BY => array('created_at', 'desc')
 			)
 		);
 	}
@@ -46,10 +45,16 @@ class ManageBlock extends \WdManager
 		return $query->visible;
 	}
 
-	protected function columns()
+	protected function get_available_columns()
 	{
-		return parent::columns() + array
+		return parent::get_available_columns() + array
 		(
+			'name' => __CLASS__ . '\NameColumn',
+			'cv' => __CLASS__ . '\CVColumn',
+			'email' => __CLASS__ . '\EmailColumn',
+			'offer_id' => __CLASS__ . '\OfferColumn',
+			'created_at' => 'Icybee\ManageBlock\DateTimeColumn',
+			/*
 			'lastname' => array
 			(
 				'label' => 'Name'
@@ -75,41 +80,42 @@ class ManageBlock extends \WdManager
 				self::COLUMN_HOOK => array($this, 'render_cell_datetime'),
 				'class' => 'date'
 			)
+			*/
 		);
 	}
+}
 
-	protected function render_cell_lastname($record, $property)
+namespace Icybee\Modules\Careers\Applications\ManageBlock;
+
+use Icybee\ManageBlock\Column;
+use Icybee\ManageBlock\EditDecorator;
+use Icybee\ManageBlock\FilterDecorator;
+
+class NameColumn extends Column
+{
+	public function render_cell($record)
 	{
-		$lastname = $record->$property;
+		$lastname = $record->lastname;
 		$firstname = $record->firstname;
 
-		$rc = parent::modify_code($lastname . ' ' . $firstname, $record->application_id, $this);
+		$rc = new EditDecorator($lastname . ' ' . $firstname, $record);
 
 		if ($record->cover_letter)
 		{
-			$rc .= '<div class="excerpt">' . \ICanBoogie\excerpt($record->cover_letter, 32) . '</div>';
+			$rc .= '<div class="excerpt small">' . \ICanBoogie\excerpt($record->cover_letter, 32) . '</div>';
 		}
 
 		return $rc;
 	}
+}
 
-	protected function render_cell_offer_id($record, $property)
-	{
-		$offer_id = $record->$property;
-
-		if (!$offer_id)
-		{
-			return parent::render_filter_cell($record, $property, '<em class="small">' . t('Unsolicited application') . '</em>');
-		}
-
-		return parent::render_filter_cell($record, $property, $record->offer ? $record->offer->title : '<em class="warn">Unknown offer: ' . $offer_id . '</em>');
-	}
-
-	protected function render_cell_cv($record, $property)
+class CVColumn extends Column
+{
+	public function render_cell($record)
 	{
 		static $last;
 
-		$path = $record->$property;
+		$path = $record->cv_hash;
 
 		if (!$path)
 		{
@@ -133,5 +139,38 @@ class ManageBlock extends \WdManager
 		$extension = pathinfo($path, PATHINFO_EXTENSION) ?: '?';
 
 		return '<a href="' . \ICanBoogie\escape($path) . '" class="btn small"><i class="icon-download-alt"></i> ' . \ICanBoogie\I18n\format_size($size) .  ' – .' . $extension . '</a>';
+	}
+}
+
+class EmailColumn extends Column
+{
+
+}
+
+class OfferColumn extends Column
+{
+	public function render_cell($record)
+	{
+		$property = $this->id;
+		$offer_id = $record->$property;
+
+		if (!$offer_id)
+		{
+			return new FilterDecorator
+			(
+				$record,
+				$property,
+				$this->is_filtering,
+				'<em class="small">' . $this->t('Unsolicited application') . '</em>'
+			);
+		}
+
+		return new FilterDecorator
+		(
+			$record,
+			$property,
+			$this->is_filtering,
+			$record->offer ? $record->offer->title : '<em class="warn">' . $this->t('Unknown offer: {0}', array($offer_id)) . '</em>'
+		);
 	}
 }

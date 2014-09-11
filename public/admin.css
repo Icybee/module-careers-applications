@@ -1,11 +1,14 @@
-@CHARSET "UTF-8";
-
 .control-group--local-careers-applications-notify {
 	display: none;
 }
 
 .control-group--local-careers-applications-notify.enabled {
 	display: block;
+}
+
+.cell--name .excerpt {
+	margin-top: .5em;
+	max-width: 76ex;
 }
 
 .cell--cv .btn {

@@ -9,28 +9,30 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications;
+
+use ICanBoogie\I18n\FormattedString;
+
+use Icybee\Modules\Views\View;
 
 class Module extends \Icybee\Module
 {
 	const DIRECTORY_NAME = 'careers-applications';
 
-	protected function get_views()
+	protected function lazy_get_views()
 	{
 		return array
 		(
 			'apply' => array
 			(
-				'title' => 'Unsollicited application form',
-				'renders' => \Icybee\Views\View::RENDERS_OTHER
+				View::TITLE => 'Unsollicited application form',
+				View::RENDERS => View::RENDERS_OTHER
 			)
 		);
 	}
 
 	/**
 	 * Creates the `careers-applications` folder.
-	 *
-	 * @see ICanBoogie.Module::install()
 	 */
 	public function install(\ICanBoogie\Errors $errors)
 	{
@@ -49,8 +51,6 @@ class Module extends \Icybee\Module
 
 	/**
 	 * Checks if the `careers-applications` folder exists.
-	 *
-	 * @see ICanBoogie.Module::is_installed()
 	 */
 	public function is_installed(\ICanBoogie\Errors $errors)
 	{
@@ -61,7 +61,7 @@ class Module extends \Icybee\Module
 
 		if (!is_dir($root . $path))
 		{
-			$errors[$this->id] = t('The %directory directory is missing.', array('%directory' => $path));
+			$errors[$this->id] = new FormattedString('The %directory directory is missing.', array('%directory' => $path));
 
 			return false;
 		}

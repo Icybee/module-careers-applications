@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\ActiveRecord\Careers;
+namespace Icybee\Modules\Careers\Applications;
 
 class Application extends \ICanBoogie\ActiveRecord
 {
@@ -26,13 +26,18 @@ class Application extends \ICanBoogie\ActiveRecord
 	/**
 	 * Returns the offer associated with the application.
 	 *
-	 * @return \ICanBoogie\ActiveRecord\Careers\Offer
+	 * @return \Icybee\Modules\Careers\Offers\Offer
 	 */
 	protected function get_offer()
 	{
 		global $core;
 
 		return $this->offer_id ? $core->models['careers.offers'][$this->offer_id] : null;
+	}
+
+	protected function get_cv()
+	{
+		return '/path/to/cs';
 	}
 
 	/**
