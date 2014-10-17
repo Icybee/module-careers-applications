@@ -2,14 +2,14 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
-use ICanBoogie\Module;
 use ICanBoogie\ActiveRecord\Model;
+use ICanBoogie\Module\Descriptor;
 
 return array
 (
-	Module::T_TITLE => 'Job applications',
-	Module::T_CATEGORY => 'feedback',
-	Module::T_MODELS => array
+	Descriptor::TITLE => 'Job applications',
+	Descriptor::CATEGORY => 'feedback',
+	Descriptor::MODELS => array
 	(
 		'primary' => array
 		(
@@ -33,8 +33,8 @@ return array
 		)
 	),
 
-	Module::T_NAMESPACE => __NAMESPACE__,
-	Module::T_REQUIRES => array
+	Descriptor::NS => __NAMESPACE__,
+	Descriptor::REQUIRES => array
 	(
 		'forms' => '2.*'
 	)
