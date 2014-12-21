@@ -11,67 +11,68 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
-use ICanBoogie\Uploaded;
-use ICanBoogie\Mailer;
+use ICanBoogie\DateTime;
 use ICanBoogie\HTTP\Request;
-use ICanBoogie\ActiveRecord\File;
 
 class SaveOperation extends \ICanBoogie\SaveOperation
 {
-	protected $accept = array
-	(
+	protected $accept = [
+
 		'.pdf' => 'application/pdf',
 		'.odt' => 'application/vnd.oasis.opendocument.text',
 		'.doc' => 'application/msword',
 		'.docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-	);
+
+	];
 
 	protected function lazy_get_properties()
 	{
-		global $core;
+		$properties = array_merge(parent::lazy_get_properties(), [
 
-		$properties = parent::lazy_get_properties();
+			'site_id' => $this->app->site_id,
+			'created_at' => DateTime::now()
 
-		if (empty($properties['cv']))
-		{
-			unset($properties['cv']);
-		}
-
-		$properties['site_id'] = $core->site_id;
+		]);
 
 		return $properties;
 	}
 
 	public function __invoke(Request $request)
 	{
-		global $core;
+		/* @var $cv \ICanBoogie\HTTP\File */
 
+		$cv = $request->files['cv'];
+
+		if ($cv->is_valid)
+		{
+			$request['cv'] = $cv;
+		}
+
+		return parent::__invoke($request);
+
+		/*
 		$response = parent::__invoke($request);
 
 		if ($response->rc)
 		{
+			$app = $this->app;
 			$record = $this->module->model[$response->rc['key']];
-// 			$this->super->notify_bind = $record;
-			$metas = $core->site->metas;
+			$metas = $app->site->metas;
 
 			if ($metas['careers_applications.is_notify'])
 			{
 				$message = Patron($metas['jobs_applications.notify.template'], $record);
 
-				$mailer = new Mailer
-				(
-					array
-					(
-						Mailer::T_BCC => $metas['jobs_applications.notify.bcc'],
-						Mailer::T_DESTINATION => $record->email,
-						Mailer::T_FROM => $metas['jobs_applications.notify.from'],
-						Mailer::T_MESSAGE => $message,
-						Mailer::T_SUBJECT => $metas['jobs_applications.notify.subject'],
-						Mailer::T_TYPE => 'plain'
-					)
-				);
+				$app->mail([
 
-				$mailer();
+					'bcc' => $metas['jobs_applications.notify.bcc'],
+					'to' => $record->email,
+					'from' => $metas['jobs_applications.notify.from'],
+					'body' => $message,
+					'subject' => $metas['jobs_applications.notify.subject'],
+					'type' => 'plain'
+
+				]);
 			}
 
 			#
@@ -91,36 +92,7 @@ class SaveOperation extends \ICanBoogie\SaveOperation
 		}
 
 		return $response;
-	}
-
-	/**
-	 * Extends the method to handle missing files.
-	 *
-	 * The only purpose of this method is to handle missing files, further errors - such as type
-	 * errors - should be handled during the _validate_ method.
-	 *
-	 * @param array $controls
-	 *
-	 * @return boolean Control success.
-	 */
-	protected function control(array $controls)
-	{
-		global $core;
-
-		$request = $this->request;
-
-		if (!$request['cv'])
-		{
-			$request['cv'] = $file = new Uploaded('cv', $this->accept);
-
-			if (!$file->er)
-			{
-				$path = $core->config['repository.temp'] . '/' . basename($file->location) . $file->extension;
-				$file->move(\ICanBoogie\DOCUMENT_ROOT . $path, true);
-			}
-		}
-
-		return parent::control($controls);
+		*/
 	}
 
 	/**
@@ -128,21 +100,36 @@ class SaveOperation extends \ICanBoogie\SaveOperation
 	 */
 	protected function validate(\ICanBoogie\Errors $errors)
 	{
-		$properties = $this->properties;
+		$request = $this->request;
 
-		if (isset($properties['cv']) && $properties['cv'] instanceof Uploaded)
+		/* @var $cv \ICanBoogie\HTTP\File */
+
+		$cv = $request['cv'];
+
+		if ($cv)
 		{
-			$file = $properties['cv'];
+			$accept = $this->accept;
 
-			if ($file->er)
+			if ($cv->match($accept))
 			{
-				$errors[File::PATH] = t('Unable to upload file %file. :message', array('%file' => $file->name, ':message' => $file->er_message));
+				$hash = sha1_file($cv->pathname);
+				$extension = $cv->extension;
+				$destination = \ICanBoogie\REPOSITORY . Module::DIRECTORY_NAME . DIRECTORY_SEPARATOR . $hash . $extension;
 
-				return false;
+				if (!file_exists($destination))
+				{
+					copy($cv->pathname, $destination);
+				}
+
+				$request['cv_hash'] = $hash;
 			}
-			else if (!$file->location)
+			else
 			{
-				unset($this->properties['cv']);
+				$errors['cv'] = $errors->format("Wrong file format, must be one of the following: !formats", [
+
+					'formats' => implode(' ', array_keys($accept))
+
+				]);
 			}
 		}
 

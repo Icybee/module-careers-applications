@@ -1,24 +1,21 @@
 <?php
 
-return array
-(
-	'!admin:manage' => array
-	(
+return [
 
-	),
+	'!admin:manage' => [
 
-	'!admin:new' => array
-	(
+	],
 
-	),
+	'!admin:new' => [
 
-	'!admin:config' => array
-	(
+	],
 
-	),
+	'!admin:config' => [
 
-	'!admin:edit' => array
-	(
+	],
 
-	)
-);
+	'!admin:edit' => [
+
+	]
+
+];

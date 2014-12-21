@@ -11,17 +11,24 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
+use ICanBoogie\ActiveRecord\CreatedAtProperty;
+
 class Application extends \ICanBoogie\ActiveRecord
 {
-	/**
-	 * Defaults the `$model` param to `careers.applications`.
-	 *
-	 * @param string $model
-	 */
-	public function __construct($model='careers.applications')
-	{
-		parent::__construct($model);
-	}
+	const MODEL_ID = 'careers.applications';
+
+	public $application_id;
+	public $offer_id;
+	public $site_id;
+	public $firstname;
+	public $lastname;
+	public $email;
+	public $study_level;
+	public $experience;
+	public $cover_letter;
+	public $cv_hash;
+
+	use CreatedAtProperty;
 
 	/**
 	 * Returns the offer associated with the application.
@@ -30,14 +37,18 @@ class Application extends \ICanBoogie\ActiveRecord
 	 */
 	protected function get_offer()
 	{
-		global $core;
-
-		return $this->offer_id ? $core->models['careers.offers'][$this->offer_id] : null;
+		return $this->offer_id ? $this->app->models['careers.offers'][$this->offer_id] : null;
 	}
 
-	protected function get_cv()
+	protected function get_cv_url()
 	{
-		return '/path/to/cs';
+		$hash = $this->cv_hash;
+		$repository = \ICanBoogie\REPOSITORY . Module::DIRECTORY_NAME . DIRECTORY_SEPARATOR;
+
+		$matches = glob($repository . $hash . ".*");
+		$pathname = current($matches);
+
+		return \ICanBoogie\strip_root($pathname);
 	}
 
 	/**
@@ -47,8 +58,6 @@ class Application extends \ICanBoogie\ActiveRecord
 	 */
 	protected function get_absolute_cv_url()
 	{
-		global $core;
-
-		return $core->site->url . $this->cv;
+		return $this->app->site->url . $this->cv_url;
 	}
 }

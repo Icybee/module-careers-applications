@@ -15,11 +15,10 @@ class Hooks
 {
 	public static function dashboard_summary()
 	{
-		global $core;
+		$app = \ICanBoogie\app();
+		$app->document->css->add(DIR . 'public/dashboard.css');
 
-		$core->document->css->add(DIR . 'public/dashboard.css');
-
-		$last = $core->models['careers.applications']->visible->order('created_at DESC')->limit(3)->all;
+		$last = $app->models['careers.applications']->visible->order('created_at DESC')->limit(3)->all;
 
 		if (!$last)
 		{
@@ -68,7 +67,7 @@ class Hooks
 
 			$cv = null;
 			$root = $_SERVER['DOCUMENT_ROOT'];
-			$path = $record->cv;
+			$path = $record->cv_url;
 
 			if ($path)
 			{
@@ -98,7 +97,7 @@ class Hooks
 			$rc .= <<<EOT
 	<tr>
 	<td class="date light">$date</td>
-	<td class="title"><a href="{$core->site->path}/admin/careers.applications/{$record->application_id}/edit">{$title}</a> <span class="lighter">&mdash;</span> $offer
+	<td class="title"><a href="{$app->site->path}/admin/careers.applications/{$record->application_id}/edit">{$title}</a> <span class="lighter">&mdash;</span> $offer
 	$excerpt $cv
 	</td>
 	</tr>
@@ -107,9 +106,9 @@ EOT;
 
 		$rc .= '</table>';
 
-		$path = $core->site->path;
-		$count = $core->models['careers.applications']->visible->count;
-		$txt_all = \ICanBoogie\I18n\t('careers_applications.count', array(':count' => $count));
+		$path = $app->site->path;
+		$count = $app->models['careers.applications']->visible->count;
+		$txt_all = \ICanBoogie\I18n\t('careers_applications.count', [ ':count' => $count ]);
 
 		$rc .= <<<EOT
 <div class="panel-footer"><a href="$path/admin/careers.applications">$txt_all</a></div>

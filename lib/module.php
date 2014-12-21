@@ -11,9 +11,7 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
-use ICanBoogie\I18n\FormattedString;
-
-use Icybee\Modules\Views\View;
+use Icybee\Modules\Views\ViewOptions;
 
 class Module extends \Icybee\Module
 {
@@ -21,14 +19,15 @@ class Module extends \Icybee\Module
 
 	protected function lazy_get_views()
 	{
-		return array
-		(
-			'apply' => array
-			(
-				View::TITLE => 'Unsollicited application form',
-				View::RENDERS => View::RENDERS_OTHER
-			)
-		);
+		return [
+
+			'apply' => [
+
+				ViewOptions::TITLE => 'Unsollicited application form',
+				ViewOptions::RENDERS => ViewOptions::RENDERS_OTHER
+
+			]
+		];
 	}
 
 	/**
@@ -36,14 +35,11 @@ class Module extends \Icybee\Module
 	 */
 	public function install(\ICanBoogie\Errors $errors)
 	{
-		global $core;
+		$directory = \ICanBoogie\REPOSITORY . self::DIRECTORY_NAME;
 
-		$root = \ICanBoogie\DOCUMENT_ROOT;
-		$path = $core->config['repository.files'] . DIRECTORY_SEPARATOR . self::DIRECTORY_NAME . DIRECTORY_SEPARATOR;
-
-		if (!is_dir($root . $path))
+		if (!is_dir($directory))
 		{
-			mkdir($root . $path);
+			mkdir($directory);
 		}
 
 		return parent::install($errors);
@@ -54,14 +50,15 @@ class Module extends \Icybee\Module
 	 */
 	public function is_installed(\ICanBoogie\Errors $errors)
 	{
-		global $core;
+		$directory = \ICanBoogie\REPOSITORY . self::DIRECTORY_NAME;
 
-		$root = \ICanBoogie\DOCUMENT_ROOT;
-		$path = $core->config['repository.files'] . DIRECTORY_SEPARATOR . self::DIRECTORY_NAME . DIRECTORY_SEPARATOR;
-
-		if (!is_dir($root . $path))
+		if (!is_dir($directory))
 		{
-			$errors[$this->id] = new FormattedString('The %directory directory is missing.', array('%directory' => $path));
+			$errors[$this->id] = $errors->format('The directory %directory is missing.', [
+
+				'%directory' => $directory
+
+			]);
 
 			return false;
 		}

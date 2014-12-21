@@ -24,22 +24,18 @@ class ManageBlock extends \Icybee\ManageBlock
 		$document->css->add(DIR . 'public/admin.css');
 	}
 
-	public function __construct(Module $module, array $attributes=array())
+	public function __construct(Module $module, array $attributes=[])
 	{
-		parent::__construct
-		(
-			$module, $attributes + array
-			(
-				self::T_COLUMNS_ORDER => array('name', 'cv', 'email', 'offer_id', 'created_at'),
-				self::T_ORDER_BY => array('created_at', 'desc')
-			)
-		);
+		parent::__construct($module, $attributes + [
+
+			self::T_COLUMNS_ORDER => [ 'name', 'cv', 'email', 'offer_id', 'created_at' ],
+			self::T_ORDER_BY => [ 'created_at', 'desc' ]
+
+		]);
 	}
 
 	protected function alter_query(Query $query, array $filters)
 	{
-		global $core;
-
 		$query = parent::alter_query($query, $filters);
 
 		return $query->visible;
@@ -47,41 +43,15 @@ class ManageBlock extends \Icybee\ManageBlock
 
 	protected function get_available_columns()
 	{
-		return parent::get_available_columns() + array
-		(
+		return parent::get_available_columns() + [
+
 			'name' => __CLASS__ . '\NameColumn',
 			'cv' => __CLASS__ . '\CVColumn',
 			'email' => __CLASS__ . '\EmailColumn',
 			'offer_id' => __CLASS__ . '\OfferColumn',
 			'created_at' => 'Icybee\ManageBlock\DateTimeColumn',
-			/*
-			'lastname' => array
-			(
-				'label' => 'Name'
-			),
 
-			'cv' => array
-			(
-				'orderable' => false
-			),
-
-			'email' => array
-			(
-				'discreet' => true
-			),
-
-			'offer_id' => array
-			(
-				'label' => 'Offer'
-			),
-
-			'created' => array
-			(
-				self::COLUMN_HOOK => array($this, 'render_cell_datetime'),
-				'class' => 'date'
-			)
-			*/
-		);
+		];
 	}
 }
 
@@ -113,21 +83,13 @@ class CVColumn extends Column
 {
 	public function render_cell($record)
 	{
-		static $last;
-
-		$path = $record->cv_hash;
+		$path = $record->cv_url;
 
 		if (!$path)
 		{
 			return;
 		}
 
-		if ($path == $last)
-		{
-			return self::REPEAT_PLACEHOLDER;
-		}
-
-		$last = $path;
 		$root = \ICanBoogie\DOCUMENT_ROOT;
 
 		if (!file_exists($root . $path))
@@ -170,7 +132,7 @@ class OfferColumn extends Column
 			$record,
 			$property,
 			$this->is_filtering,
-			$record->offer ? $record->offer->title : '<em class="warn">' . $this->t('Unknown offer: {0}', array($offer_id)) . '</em>'
+			$record->offer ? $record->offer->title : '<em class="warn">' . $this->t('Unknown offer: {0}', [ $offer_id ]) . '</em>'
 		);
 	}
 }

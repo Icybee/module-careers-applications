@@ -13,48 +13,18 @@ namespace Icybee\Modules\Careers\Applications;
 
 use ICanBoogie\ActiveRecord\Query;
 use ICanBoogie\DateTime;
-use ICanBoogie\Uploaded;
+use ICanBoogie\HTTP\File;
 
 class Model extends \ICanBoogie\ActiveRecord\Model
 {
-	public function save(array $properties, $key=null, array $options=array())
+	public function save(array $properties, $key=null, array $options=[])
 	{
-		global $core;
-
 		if (!$key && empty($properties['created_at']))
 		{
 			$properties['created_at'] = DateTime::now();
 		}
 
-		$root = \ICanBoogie\DOCUMENT_ROOT;
-		$repository = $core->config['repository.files'] . DIRECTORY_SEPARATOR . \Icybee\Modules\Careers\Applications\Module::DIRECTORY_NAME . DIRECTORY_SEPARATOR;
-
-		if (!is_dir($root . $repository))
-		{
-			throw new \Exception(\ICanBoogie\format('The repository %repository does not exists', array('%repository' => $repository)));
-		}
-
-		$info = null;
-
-		if (!empty($properties['cv']) && $properties['cv'] instanceof Uploaded)
-		{
-			$file = $properties['cv'];
-			$path = $repository . date('Ymd-His-') . \ICanBoogie\normalize($properties['lastname'] . '-' . $properties['firstname']) . $file->extension;
-
-			$info = array($file, $path);
-			$properties['cv'] = $path;
-		}
-
-		$rc = parent::save($properties, $key, $options);
-
-		if ($rc && $info)
-		{
-			list($file, $path) = $info;
-
-			$file->move($root . $path);
-		}
-
-		return $rc;
+		return parent::save($properties, $key, $options);
 	}
 
 	/*
@@ -80,12 +50,18 @@ class Model extends \ICanBoogie\ActiveRecord\Model
 	 *
 	 * @param Query $query
 	 *
+	 * @param int|null $site_id Identifier of the website. I `null` the identifier of the current
+	 * website is used instead.
+	 *
 	 * @return Query
 	 */
 	protected function scope_visible(Query $query, $site_id=null)
 	{
-		global $core;
+		if ($site_id === null)
+		{
+			$site_id = $this->app->site_id;
+		}
 
-		return $query->where('site_id = 0 OR site_id = ?', $site_id ? $site_id : $core->site_id);
+		return $query->and('site_id = 0 OR site_id = ?', $site_id);
 	}
 }

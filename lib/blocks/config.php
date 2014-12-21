@@ -31,38 +31,30 @@ class ConfigBlock extends \Icybee\ConfigBlock
 	{
 		$ns = $this->module->flat_id;
 
-		return array_merge
-		(
-			parent::alter_children($children, $properties, $attributes), array
-			(
-				"local[$ns.form_id]" => new \WdFormSelectorElement
-				(
-					'select', array
-					(
-						Form::LABEL => 'form_id',
-						Element::REQUIRED => true,
-						Element::DESCRIPTION => 'form_id'
-					)
-				),
+		return array_merge(parent::alter_children($children, $properties, $attributes), [
 
-				"local[$ns.is_notify]" => new Element
-				(
-					Element::TYPE_CHECKBOX, array
-					(
-						Element::LABEL => 'is_notify',
-						Element::DESCRIPTION => 'is_notify'
-					)
-				),
+			"local[$ns.form_id]" => new \WdFormSelectorElement('select', [
 
-				"local[$ns.notify]" => new \WdEMailNotifyElement
-				(
-					array
-					(
-						Form::LABEL => 'notify',
-						Element::DEFAULT_VALUE => array
-						(
-							'subject' => 'Exemple : Accusé de réception de votre candidature',
-							'template' => <<<EOT
+				Form::LABEL => 'form_id',
+				Element::REQUIRED => true,
+				Element::DESCRIPTION => 'form_id'
+
+			]),
+
+			"local[$ns.is_notify]" => new Element(Element::TYPE_CHECKBOX, [
+
+				Element::LABEL => 'is_notify',
+				Element::DESCRIPTION => 'is_notify'
+
+			]),
+
+			"local[$ns.notify]" => new \WdEMailNotifyElement([
+
+				Form::LABEL => 'notify',
+				Element::DEFAULT_VALUE => [
+
+					'subject' => 'Exemple : Accusé de réception de votre candidature',
+					'template' => <<<EOT
 Objet : accusé de réception de candidature.
 
 Bonjour,
@@ -87,18 +79,14 @@ l'exercer, vous pouvez écrire à :
 
 Direction des ressources Humaines
 EOT
-						)
-					)
-				),
+				]
+			]),
 
-				"local[$ns.is_cv_required]" => new Element
-				(
-					Element::TYPE_CHECKBOX, array
-					(
-						Element::LABEL => 'Le C.V. est obligatoire'
-					)
-				)
-			)
-		);
+			"local[$ns.is_cv_required]" => new Element(Element::TYPE_CHECKBOX, [
+
+				Element::LABEL => 'Le C.V. est obligatoire'
+
+			])
+		]);
 	}
 }

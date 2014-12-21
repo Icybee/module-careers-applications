@@ -21,41 +21,39 @@ class EditBlock extends \Icybee\EditBlock
 {
 	protected function lazy_get_attributes()
 	{
-		return \ICanBoogie\array_merge_recursive
-		(
-			parent::lazy_get_attributes(), array
-			(
-				Element::GROUPS => array
-				(
-					'more' => array
-					(
-						'title' => 'Mobilité et Poste'
-					),
+		return \ICanBoogie\array_merge_recursive(parent::lazy_get_attributes(), [
 
-					'taxonomy' => array
-					(
-						'title' => 'Taxinomie'
-					),
+			Element::GROUPS => [
 
-					'file' => array
-					(
-						'title' => 'Fichiers associés'
-					)
-				)
-			)
-		);
+				'more' => [
+
+					'title' => 'Mobilité et Poste'
+
+				],
+
+				'taxonomy' => [
+
+					'title' => 'Taxinomie'
+
+				],
+
+				'file' => [
+
+					'title' => 'Fichiers associés'
+
+				]
+			]
+		]);
 	}
 
 	protected function lazy_get_children()
 	{
 		$form_attributes = \Icybee\Modules\Careers\Applications\ApplyForm::tags($this->values);
 
-		return array_merge
-		(
-			parent::lazy_get_children(), $form_attributes[Element::CHILDREN], array
-			(
-				'email-confirm' => null
-			)
-		);
+		return array_merge(parent::lazy_get_children(), $form_attributes[Element::CHILDREN], [
+
+			'email-confirm' => null
+
+		]);
 	}
 }

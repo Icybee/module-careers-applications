@@ -1,25 +1,29 @@
 <?php
 
-return array
-(
+return [
+
 	'Yes' => 'Sí',
 
-	'careers_applications' => array
-	(
-		'label' => array
-		(
+	'careers_applications' => [
+
+		'label' => [
+
 			'email_confirm' => 'Repetir e-mail',
 			'region' => "Región de residencia",
 			'mobility' => 'Movilidad geográfica',
 			'cover_letter' => 'Detalle de su solicitud',
 			'cv' => 'Currículo'
-		),
 
-		'description' => array
-		(
+		],
+
+		'description' => [
+
 			'interest' => "Seleccione entre uno y tres oficios.",
-		),
+
+		],
 
 		'Apply_box' => 'Aplicar'
-	)
-);
+
+	]
+
+];

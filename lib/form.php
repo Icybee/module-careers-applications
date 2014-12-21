@@ -11,123 +11,100 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
-use ICanBoogie\Mailer;
 use ICanBoogie\Operation;
 
-use Brickrouge\Button;
 use Brickrouge\Element;
-use Brickrouge\File;
 use Brickrouge\Form;
 use Brickrouge\Text;
 
 class ApplyForm extends Form
 {
-	public function __construct(array $attributes=array())
+	public function __construct(array $attributes=[])
 	{
-		parent::__construct
-		(
-			\ICanBoogie\array_merge_recursive
-			(
-				$attributes, static::tags(), array
-				(
-					Form::RENDERER => 'Simple',
-					Form::HIDDENS => array
-					(
-						Operation::DESTINATION => 'careers.applications',
-						Operation::NAME => 'save'
-					),
+		parent::__construct(\ICanBoogie\array_merge_recursive($attributes, static::tags(), [
 
-					'name' => 'careers.applications/apply'
-				)
-			)
-		);
+			Form::RENDERER => 'Simple',
+			Form::HIDDENS => [
+
+				Operation::DESTINATION => 'careers.applications',
+				Operation::NAME => 'save'
+
+			],
+
+			'name' => 'careers.applications/apply'
+
+		]));
 	}
 
-	public static function tags(array $properties=array())
+	public static function tags(array $properties=[])
 	{
-		global $core;
+		$app = \ICanBoogie\app();
+		$offer_id = $app->request['nid'];
 
-		$offer_id = $core->request['nid'];
+		return [
 
-		return array
-		(
-			Form::HIDDENS => array
-			(
+			Form::HIDDENS => [
+
 				'offer_id' => $offer_id
-			),
 
-			Element::CHILDREN => array
-			(
-				'firstname' => new Text
-				(
-					array
-					(
-						Form::LABEL => 'firstname',
-						Element::REQUIRED => true
-					)
-				),
+			],
 
-				'lastname' => new Text
-				(
-					array
-					(
-						Form::LABEL => 'lastname',
-						Element::REQUIRED => true
-					)
-				),
+			Element::CHILDREN => [
 
-				'email' => new Text
-				(
-					array
-					(
-						Form::LABEL => 'email',
-						Element::REQUIRED => true,
-						Element::VALIDATOR => array('Brickrouge\Form::validate_email')
-					)
-				),
+				'firstname' => new Text([
 
-				'email-confirm' => new Text
-				(
-					array
-					(
-						Form::LABEL => 'email_confirm',
-						Element::REQUIRED => true
-					)
-				),
+					Form::LABEL => 'firstname',
+					Element::REQUIRED => true
 
-				'cover_letter' => new Element
-				(
-					'textarea', array
-					(
-						Form::LABEL => 'cover_letter',
-						Element::REQUIRED => true
-					)
-				),
+				]),
 
-				'cv' => new Element
-				(
-					'input', array
-					(
-						Form::LABEL => 'cv',
-// 						Element::FILE_WITH_LIMIT => 4096,
-// 						Element::FILE_WITH_REMINDER => true,
-						Element::REQUIRED => $core->site->metas['careers_applications.is_cv_required'],
+				'lastname' => new Text([
 
-						'type' => 'file'
-					)
-				)
-			)
-		);
+					Form::LABEL => 'lastname',
+					Element::REQUIRED => true
+
+				]),
+
+				'email' => new Text([
+
+					Form::LABEL => 'email',
+					Element::REQUIRED => true,
+					Element::VALIDATOR => [ 'Brickrouge\Form::validate_email' ]
+
+				]),
+
+				'email-confirm' => new Text([
+
+					Form::LABEL => 'email_confirm',
+					Element::REQUIRED => true
+
+				]),
+
+				'cover_letter' => new Element('textarea', [
+
+					Form::LABEL => 'cover_letter',
+					Element::REQUIRED => true
+
+				]),
+
+				'cv' => new Element('input', [
+
+					Form::LABEL => 'cv',
+					Element::REQUIRED => $app->site->metas['careers_applications.is_cv_required'],
+
+					'type' => 'file'
+
+				])
+			]
+		];
 	}
 
 	public static function get_defaults()
 	{
-		global $core;
+		$email = \ICanBoogie\app()->user->email;
 
-		$email = $core->user->email;
+		return [
 
-		return array
-		(
 			'notify_bcc' => $email,
 			'notify_from' => 'Candidature <no-reply@example.com>',
 			'notify_subject' => 'Dépôt de candidature',
@@ -144,7 +121,7 @@ Candidature pour l'offre : #{@offer.title} (n°#{@offer_id})
 
 C.V. : #{@absolute_cv_url}
 EOT
-		);
+		];
 	}
 
 	public function validate($values, \ICanBoogie\Errors $errors)
@@ -154,7 +131,7 @@ EOT
 			$values['cv'] = true;
 		}
 
-		$rc = parent::validate($values, $errors);
+		parent::validate($values, $errors);
 
 		if (isset($values['email']) && isset($values['email-confirm']) && $values['email'] != $values['email-confirm'])
 		{
@@ -166,9 +143,7 @@ EOT
 
 	public function alter_notify($properties)
 	{
-		global $core;
-
-		$application = $core->models['careers.applications'][$properties->rc['key']];
+		$application = \ICanBoogie\app()->models['careers.applications'][$properties->rc['key']];
 
 		$properties->bind = $application;
 
@@ -178,7 +153,7 @@ EOT
 
 			if ($recipient)
 			{
-				$properties->mail_tags[Mailer::T_DESTINATION] = $recipient;
+				$properties->mail_tags['to'] = $recipient;
 			}
 		}
 	}

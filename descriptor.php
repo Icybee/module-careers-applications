@@ -5,37 +5,39 @@ namespace Icybee\Modules\Careers\Applications;
 use ICanBoogie\ActiveRecord\Model;
 use ICanBoogie\Module\Descriptor;
 
-return array
-(
+return [
+
 	Descriptor::TITLE => 'Job applications',
 	Descriptor::CATEGORY => 'feedback',
-	Descriptor::MODELS => array
-	(
-		'primary' => array
-		(
-			Model::SCHEMA => array
-			(
-				'fields' => array
-				(
+	Descriptor::MODELS => [
+
+		'primary' => [
+
+			Model::SCHEMA => [
+
+				'fields' => [
+
 					'application_id' => 'serial',
 					'offer_id' => 'foreign',
 					'site_id' => 'foreign',
-					'firstname' => array('varchar', 80),
-					'lastname' => array('varchar', 80),
-					'email' => array('varchar', 80),
-					'study_level' => array('integer', 'tiny'),
-					'experience' => array('integer', 'tiny'),
+					'firstname' => [ 'varchar', 80 ],
+					'lastname' => [ 'varchar', 80 ],
+					'email' => [ 'varchar', 80 ],
+					'study_level' => [ 'integer', 'tiny' ],
+					'experience' => [ 'integer', 'tiny' ],
 					'cover_letter' => 'text',
-					'cv_hash' => array('char', 40),
+					'cv_hash' => [ 'char', 40 ],
 					'created_at' => 'datetime'
-				)
-			)
-		)
-	),
+
+				]
+			]
+		]
+	],
 
 	Descriptor::NS => __NAMESPACE__,
-	Descriptor::REQUIRES => array
-	(
+	Descriptor::REQUIRES => [
+
 		'forms' => '2.*'
-	)
-);
+
+	]
+];
