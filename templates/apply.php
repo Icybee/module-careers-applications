@@ -1,16 +1,17 @@
 <?php
 
-$formid = $app->site->metas['careers_applications.form_id'];
+$form_id = $app->site->metas['careers_applications.form_id'];
 
-if (!$formid)
+if (!$form_id)
 {
 	throw new \ICanBoogie\Exception\Config($app->modules['careers.applications']);
 }
 
 try
 {
-	$form = $app->models['forms'][$formid];
-	$page->node = $form;
+	/* @var $form \Icybee\Modules\Forms\Form */
+
+	$app->request->context->node = $form = $app->models['forms'][$form_id];
 
 	echo $form;
 }
