@@ -13,6 +13,7 @@ namespace Icybee\Modules\Careers\Applications;
 
 use Brickrouge\Element;
 use Brickrouge\Form;
+use Icybee\Modules\Forms\PopForm;
 
 /**
  * A block to configure careers applications.
@@ -27,13 +28,13 @@ class ConfigBlock extends \Icybee\ConfigBlock
 		$document->js->add(DIR . 'public/admin.js');
 	}
 
-	protected function alter_children(array $children, array &$properties, array &$attributes)
+	protected function lazy_get_children()
 	{
 		$ns = $this->module->flat_id;
 
-		return array_merge(parent::alter_children($children, $properties, $attributes), [
+		return array_merge(parent::lazy_get_children(), [
 
-			"local[$ns.form_id]" => new \WdFormSelectorElement('select', [
+			"local[$ns.form_id]" => new PopForm('select', [
 
 				Form::LABEL => 'form_id',
 				Element::REQUIRED => true,
