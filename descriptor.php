@@ -15,29 +15,22 @@ return [
 
 			Model::SCHEMA => [
 
-				'fields' => [
+				'application_id' => 'serial',
+				'offer_id' => 'foreign',
+				'site_id' => 'foreign',
+				'firstname' => [ 'varchar', 80 ],
+				'lastname' => [ 'varchar', 80 ],
+				'email' => [ 'varchar', 80 ],
+				'study_level' => [ 'integer', 'tiny' ],
+				'experience' => [ 'integer', 'tiny' ],
+				'cover_letter' => 'text',
+				'cv_hash' => [ 'char', 40 ],
+				'created_at' => 'datetime'
 
-					'application_id' => 'serial',
-					'offer_id' => 'foreign',
-					'site_id' => 'foreign',
-					'firstname' => [ 'varchar', 80 ],
-					'lastname' => [ 'varchar', 80 ],
-					'email' => [ 'varchar', 80 ],
-					'study_level' => [ 'integer', 'tiny' ],
-					'experience' => [ 'integer', 'tiny' ],
-					'cover_letter' => 'text',
-					'cv_hash' => [ 'char', 40 ],
-					'created_at' => 'datetime'
-
-				]
 			]
 		]
 	],
 
 	Descriptor::NS => __NAMESPACE__,
-	Descriptor::REQUIRES => [
-
-		'forms' => '2.*'
-
-	]
+	Descriptor::REQUIRES => [ 'forms' ]
 ];
