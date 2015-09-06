@@ -20,12 +20,14 @@
 	"require": {
 		"php": ">=5.5.0",
 		"icanboogie/module-installer": "^1.2.3",
-		"icybee/code": "^3.0.3"
+		"icybee/core": "^3.0.0"
 	},
 	"suggest": {
 		"icybee/module-careers-offers": "Allows visitors to reply to job offers"
 	},
 	"autoload": {
-		"classmap": [ "lib" ]
+		"psr-4": {
+			"Icybee\\Modules\\Careers\\Applications\\": "lib"
+		}
 	}
 }
