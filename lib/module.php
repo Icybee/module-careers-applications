@@ -11,29 +11,16 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
-use Icybee\Modules\Views\ViewOptions;
+use ICanBoogie\Errors;
 
 class Module extends \Icybee\Module
 {
 	const DIRECTORY_NAME = 'careers-applications';
 
-	protected function lazy_get_views()
-	{
-		return [
-
-			'apply' => [
-
-				ViewOptions::TITLE => 'Unsollicited application form',
-				ViewOptions::RENDERS => ViewOptions::RENDERS_OTHER
-
-			]
-		];
-	}
-
 	/**
 	 * Creates the `careers-applications` folder.
 	 */
-	public function install(\ICanBoogie\Errors $errors)
+	public function install(Errors $errors)
 	{
 		$directory = \ICanBoogie\REPOSITORY . self::DIRECTORY_NAME;
 
@@ -48,13 +35,13 @@ class Module extends \Icybee\Module
 	/**
 	 * Checks if the `careers-applications` folder exists.
 	 */
-	public function is_installed(\ICanBoogie\Errors $errors)
+	public function is_installed(Errors $errors)
 	{
 		$directory = \ICanBoogie\REPOSITORY . self::DIRECTORY_NAME;
 
 		if (!is_dir($directory))
 		{
-			$errors[$this->id] = $errors->format('The directory %directory is missing.', [
+			$errors[$this->id]->add('The directory %directory is missing.', [
 
 				'%directory' => $directory
 

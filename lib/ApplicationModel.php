@@ -11,11 +11,12 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
+use ICanBoogie\ActiveRecord\Model;
 use ICanBoogie\ActiveRecord\Query;
 use ICanBoogie\DateTime;
 use ICanBoogie\HTTP\File;
 
-class Model extends \ICanBoogie\ActiveRecord\Model
+class ApplicationModel extends Model
 {
 	public function save(array $properties, $key=null, array $options=[])
 	{

@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications\Operation;
 
 use ICanBoogie\DateTime;
+use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
 
-class SaveOperation extends \ICanBoogie\SaveOperation
+use Icybee\Modules\Careers\Applications\Module;
+
+class SaveOperation extends \ICanBoogie\Module\Operation\SaveOperation
 {
 	protected $accept = [
 
@@ -98,7 +101,7 @@ class SaveOperation extends \ICanBoogie\SaveOperation
 	/**
 	 * Checks if the files handled during the control_operation_save() method have errors.
 	 */
-	protected function validate(\ICanBoogie\Errors $errors)
+	protected function validate(Errors $errors)
 	{
 		$request = $this->request;
 
@@ -125,7 +128,7 @@ class SaveOperation extends \ICanBoogie\SaveOperation
 			}
 			else
 			{
-				$errors['cv'] = $errors->format("Wrong file format, must be one of the following: !formats", [
+				$errors['cv']->add("Wrong file format, must be one of the following: !formats", [
 
 					'formats' => implode(' ', array_keys($accept))
 

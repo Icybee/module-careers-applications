@@ -35,14 +35,14 @@ class Update20120101 extends Update
 
 	public function update_column_cover()
 	{
-		$this->model
+		$this->module->model
 		->assert_has_column('cover')
 		->rename_column('cover', 'cover_letter');
 	}
 
 	public function update_column_cv()
 	{
-		$model = $this->model;
+		$model = $this->module->model;
 		$model->assert_has_column('cv');
 
 		if (!$model->has_column('cv_hash'))

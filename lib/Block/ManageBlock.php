@@ -9,19 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications\Block;
 
 use ICanBoogie\ActiveRecord\Query;
 
 use Brickrouge\Document;
 
-class ManageBlock extends \Icybee\ManageBlock
+use Icybee\Block\ManageBlock\DateTimeColumn;
+use Icybee\Modules\Careers\Applications\Module;
+
+class ManageBlock extends \Icybee\Block\ManageBlock
 {
 	protected static function add_assets(Document $document)
 	{
 		parent::add_assets($document);
 
-		$document->css->add(DIR . 'public/admin.css');
+		$document->css->add(\Icybee\Modules\Careers\Applications\DIR . 'public/admin.css');
 	}
 
 	public function __construct(Module $module, array $attributes=[])
@@ -45,21 +48,21 @@ class ManageBlock extends \Icybee\ManageBlock
 	{
 		return parent::get_available_columns() + [
 
-			'name' => __CLASS__ . '\NameColumn',
-			'cv' => __CLASS__ . '\CVColumn',
-			'email' => __CLASS__ . '\EmailColumn',
-			'offer_id' => __CLASS__ . '\OfferColumn',
-			'created_at' => 'Icybee\ManageBlock\DateTimeColumn',
+			'name' => ManageBlock\NameColumn::class,
+			'cv' => ManageBlock\CVColumn::class,
+			'email' => ManageBlock\EmailColumn::class,
+			'offer_id' => ManageBlock\OfferColumn::class,
+			'created_at' => DateTimeColumn::class,
 
 		];
 	}
 }
 
-namespace Icybee\Modules\Careers\Applications\ManageBlock;
+namespace Icybee\Modules\Careers\Applications\Block\ManageBlock;
 
-use Icybee\ManageBlock\Column;
-use Icybee\ManageBlock\EditDecorator;
-use Icybee\ManageBlock\FilterDecorator;
+use Icybee\Block\ManageBlock\Column;
+use Icybee\Block\ManageBlock\EditDecorator;
+use Icybee\Block\ManageBlock\FilterDecorator;
 
 class NameColumn extends Column
 {

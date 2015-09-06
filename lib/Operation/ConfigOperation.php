@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications\Operation;
 
-class ConfigOperation extends \Icybee\ConfigOperation
+class ConfigOperation extends \Icybee\Operation\Module\ConfigOperation
 {
 	protected function lazy_get_properties()
 	{

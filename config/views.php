@@ -11,7 +11,19 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
-class DeleteOperation extends \Icybee\Operation\ActiveRecord\Delete
-{
+use Icybee\Modules\Views\ViewOptions as Options;
 
-}
+return [
+
+	'careers.applications' => [
+
+		'apply' => [
+
+			Options::TITLE => 'Unsollicited application form',
+			Options::RENDERS => Options::RENDERS_OTHER
+
+		]
+
+	]
+
+];

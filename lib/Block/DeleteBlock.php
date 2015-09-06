@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications\Block;
 
 use ICanBoogie\ActiveRecord;
 
-class DeleteBlock extends \Icybee\DeleteBlock
+class DeleteBlock extends \Icybee\Block\DeleteBlock
 {
 	/**
 	 * Returns the record excerpt as preview.

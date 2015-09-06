@@ -9,16 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications\Block;
 
 use Brickrouge\Element;
 use Brickrouge\Form;
+
 use Icybee\Modules\Forms\PopForm;
 
 /**
  * A block to configure careers applications.
  */
-class ConfigBlock extends \Icybee\ConfigBlock
+class ConfigBlock extends \Icybee\Block\ConfigBlock
 {
 	protected static function add_assets(\Brickrouge\Document $document)
 	{

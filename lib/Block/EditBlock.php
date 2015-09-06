@@ -9,15 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Careers\Applications;
+namespace Icybee\Modules\Careers\Applications\Block;
 
 use Brickrouge\Element;
-use Brickrouge\Form;
 
 /**
  * A block to edit job applications.
  */
-class EditBlock extends \Icybee\EditBlock
+class EditBlock extends \Icybee\Block\EditBlock
 {
 	protected function lazy_get_attributes()
 	{

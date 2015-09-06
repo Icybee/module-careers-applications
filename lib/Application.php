@@ -11,9 +11,10 @@
 
 namespace Icybee\Modules\Careers\Applications;
 
+use ICanBoogie\ActiveRecord;
 use ICanBoogie\ActiveRecord\CreatedAtProperty;
 
-class Application extends \ICanBoogie\ActiveRecord
+class Application extends ActiveRecord
 {
 	const MODEL_ID = 'careers.applications';
 

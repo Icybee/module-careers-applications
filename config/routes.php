@@ -1,21 +1,7 @@
 <?php
 
-return [
+namespace Icybee\Modules\Careers\Applications;
 
-	'!admin:manage' => [
+use Icybee\Routing\RouteMaker as Make;
 
-	],
-
-	'!admin:new' => [
-
-	],
-
-	'!admin:config' => [
-
-	],
-
-	'!admin:edit' => [
-
-	]
-
-];
+return Make::admin('careers.applications', Routing\ApplicationAdminController::class);
